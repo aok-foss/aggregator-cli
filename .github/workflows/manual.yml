@@ -6,9 +6,9 @@ on:
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
+        description: 'Field to display'
         # Default value if no value is explicitly provided
-        default: 'World'
+        default: 'subscription'
         # Input has to be provided for the workflow to run
         required: true
 
@@ -19,12 +19,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: 'Prepare integration tests'
       run: |
-        echo "$LOGONDATA_JSON" > $GITHUB_WORKSPACE/src/integrationtests-cli/logon-data.json
-        export LOGONDATA_FNAME=$GITHUB_WORKSPACE/src/integrationtests-cli/logon-data.json
-        INTEGRATIONTEST_SUBSCRIPTIONID=$(jq -r '.subscription?' $LOGONDATA_FNAME)
-        echo "Next message must display a valid Guid"
-        echo "Azure subscription for testing: $INTEGRATIONTEST_SUBSCRIPTIONID"
-        echo "{\"sdk\":{\"version\":\"$DOTNETSDK_VERSION\"} }" > global.json
+        echo "$LOGONDATA_JSON" > $GITHUB_WORKSPACE/logon-data.json
+        export LOGONDATA_FNAME=$GITHUB_WORKSPACE/logon-data.json
+        INTEGRATIONTEST_DATA=$(jq -r '.${{ github.event.inputs.name }}?' $LOGONDATA_FNAME)
+        echo "${{ github.event.inputs.name }} for testing: $INTEGRATIONTEST_DATA"
       env:
         LOGONDATA_JSON: ${{ secrets.INTEGRATIONTESTS_CLI_LOGONDATA_JSON }}
       shell: bash
