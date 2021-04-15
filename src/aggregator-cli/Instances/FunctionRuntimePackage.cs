@@ -281,10 +281,9 @@ namespace aggregator.cli
             using (var request = await kudu.GetRequestAsync(HttpMethod.Get, $"api/vfs/site/wwwroot/aggregator-manifest.ini", cancellationToken))
             using (var response = await client.SendAsync(request, cancellationToken))
             {
-                string manifest = await response.Content.ReadAsStringAsync();
-
                 if (response.IsSuccessStatusCode)
                 {
+                    string manifest = await response.Content.ReadAsStringAsync();
                     uploadedRuntimeVer = ManifestParser.Parse(manifest).Version;
                 }
                 else
@@ -306,10 +305,10 @@ namespace aggregator.cli
             using (var request = await kudu.GetRequestAsync(HttpMethod.Get, $"api/vfs/site/wwwroot/bin/aggregator-function.dll", cancellationToken))
             {
                 var response = await client.SendAsync(request, cancellationToken);
-                var stream = await response.Content.ReadAsStreamAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
+                    var stream = await response.Content.ReadAsStreamAsync();
                     return stream;
                 }
 
