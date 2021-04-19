@@ -1,7 +1,7 @@
 # sample local build script
       $CONFIGURATION='Release'
-      $VER_MAJOR_MINOR_PATCH='1.0.0'
-      $VER_PRE_RELEASE_TAG='beta3.localdev1'
+      $VER_MAJOR_MINOR_PATCH='1.0.2'
+      $VER_PRE_RELEASE_TAG='foss.1'
       $DOWNLOADSECUREFILE_SECUREFILEPATH =  'C:\src\github.com\tfsaggregator\aggregator-cli\secrets\logon-data-ubuntu.json'
 
 echo "$CONFIGURATION $VER_MAJOR_MINOR_PATCH $VER_PRE_RELEASE_TAG $DOWNLOADSECUREFILE_SECUREFILEPATH"
@@ -12,10 +12,10 @@ dotnet restore src/aggregator-cli.sln
 dotnet build --configuration $CONFIGURATION src/aggregator-cli.sln /p:VersionPrefix=$VER_MAJOR_MINOR_PATCH /p:VersionSuffix=$VER_PRE_RELEASE_TAG # /flp:v=diag
 
 mkdir -p outputs/function
-dotnet publish --runtime win-x64 --configuration $CONFIGURATION --output outputs/function/ src/aggregator-function/aggregator-function.csproj -p:VersionPrefix=$VER_MAJOR_MINOR_PATCH -p:VersionSuffix=$VER_PRE_RELEASE_TAG -p:PublishTrimmed=false -flp:v=diag
+dotnet publish --configuration $CONFIGURATION --output outputs/function/ src/aggregator-function/aggregator-function.csproj -p:VersionPrefix=$VER_MAJOR_MINOR_PATCH -p:VersionSuffix=$VER_PRE_RELEASE_TAG -p:PublishTrimmed=false -flp:v=diag
 
 pushd outputs/function
-7z a -bd -r FunctionRuntime.zip
+& "C:\Program Files\7-Zip\7z.exe" a -bd -r FunctionRuntime.zip
 popd
 
 dotnet test --collect:"XPlat Code Coverage" --results-directory test-results/ --logger "trx;LogFileName=unittests-core.trx" --no-build --no-restore --configuration $CONFIGURATION src/unittests-core/unittests-core.csproj -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
