@@ -295,22 +295,22 @@ namespace aggregator.cli
         // see https://docs.microsoft.com/en-us/azure/azure-functions/functions-deployment-technologies#trigger-syncing
         private async Task<bool> TriggerSyncing(HttpClient client, InstanceName instance, CancellationToken cancellationToken)
         {
-            var webFunctionApp = await azure.AppServices.FunctionApps.GetByResourceGroupAsync(instance.ResourceGroupName, instance.FunctionAppName, cancellationToken);
-            string masterKey = await webFunctionApp.GetMasterKeyAsync(cancellationToken);
+            //var webFunctionApp = await azure.AppServices.FunctionApps.GetByResourceGroupAsync(instance.ResourceGroupName, instance.FunctionAppName, cancellationToken);
+            //string masterKey = await webFunctionApp.GetMasterKeyAsync(cancellationToken);
 
-            using (var content = new StringContent(string.Empty))
-            {
-                string triggerSyncingUrl = $"{instance.FunctionAppUrl}/admin/host/synctriggers?code={masterKey}";
-                using (var response = await client.PostAsync(triggerSyncingUrl, content, cancellationToken))
-                {
-                    bool ok = response.IsSuccessStatusCode;
-                    if (!ok)
-                    {
-                        _logger.WriteError($"Failed syncing triggers with {response.ReasonPhrase}");
-                        return false;
-                    }
-                }
-            }
+            //using (var content = new StringContent(string.Empty))
+            //{
+            //    string triggerSyncingUrl = $"{instance.FunctionAppUrl}/admin/host/synctriggers?code={masterKey}";
+            //    using (var response = await client.PostAsync(triggerSyncingUrl, content, cancellationToken))
+            //    {
+            //        bool ok = response.IsSuccessStatusCode;
+            //        if (!ok)
+            //        {
+            //            _logger.WriteError($"Failed syncing triggers with {response.ReasonPhrase}");
+            //            return false;
+            //        }
+            //    }
+            //}
             return true;
         }
 

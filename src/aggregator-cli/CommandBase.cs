@@ -92,11 +92,12 @@ namespace aggregator.cli
                     ? ex.Message
                     : ex.InnerException.Message
                     );
+                Logger.WriteError(ex.ToString());
                 Telemetry.TrackException(ex);
                 return ExitCodes.Unexpected;
             }
         }
-
+    
         private static T GetCustomAttribute<T>()
             where T : Attribute
         {
